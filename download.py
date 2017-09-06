@@ -15,18 +15,26 @@ def getHTMLText(url):
 		print(e)
 		return ""
 
-def getPokeDexInfo(text):
+def downloadPokeDex(text):
+	gen1 = []
 	soup = BeautifulSoup(text, "html.parser")
 	file = open("pokemon_list.html", "w")
 
-	for span in soup.find_all('span', "infocard-data"):
+	if soup.h2.text == 'Generation 1':
+		for sibling in soup.h2.next_siblings:
+			if sibling.name == "div":
+				gen1 = str(sibling)
+				break
+
+	gen1Soup = BeautifulSoup(gen1, "html.parser")
+	for span in gen1Soup.find_all('span', "infocard-data"):
 		href = span.a.get('href')
-		#print(href)
 		name = href[href.rfind('/')+1:]
 		print(name)
 		link = "https://img.pokemondb.net/sprites/red-blue/normal/%s.png" % (name)
 		downloadPic(link, name)
 		file.write(link+"\n")
+
 	file.close()
 
 def downloadPic(url, name):
@@ -42,13 +50,12 @@ def downloadPic(url, name):
 		f.close()
 	except requests.RequestException as e:
 		print(e)
-	
+
 
 def main():
 	url="https://pokemondb.net/sprites/"
 	text = getHTMLText(url)
-	getPokeDexInfo(text)
+	downloadPokeDex(text)
 	
 if __name__ == '__main__':
 	main()
-	cv2.waitKey(0)
