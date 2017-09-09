@@ -2,3 +2,5 @@
 /sprites
 /index.pickle
 /tools/__*
+/*.png
+/queries
