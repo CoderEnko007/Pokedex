@@ -1,3 +1,6 @@
+'''
+python index.py --sprites sprites --index index.pickle
+'''
 from tools.zernikemoments import ZernikeMoments
 import numpy as np
 import pickle
